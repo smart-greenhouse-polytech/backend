@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: smart-greenhouse
+  datasource:
+    url: jdbc:postgresql://localhost:5432/polytech-smart-house
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    change-log: classpath:/db/changelog.xml
+    drop-first: true
