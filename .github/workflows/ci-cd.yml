@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
-  DOCKERHUB_IMAGE: vyach12/smart-greenhouse-arm
+  DOCKERHUB_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/smart-greenhouse-arm
 
 jobs:
   build-and-test:
@@ -23,6 +23,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+
+      - name: Make mvnw executable
+        run: chmod +x mvnw
 
       - name: Start Docker Compose
         run: docker compose up -d
