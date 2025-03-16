@@ -10,3 +10,8 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog.xml
     drop-first: true
+
+mqtt:
+  broker: tcp://localhost:1883
+  topic: greenhouse/data
+  client-id: "SpringBootMQTTClient"
