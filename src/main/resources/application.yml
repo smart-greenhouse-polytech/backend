@@ -6,7 +6,6 @@ spring:
     username: user
     password: password
     driver-class-name: org.postgresql.Driver
-
   liquibase:
     change-log: classpath:/db/changelog.xml
     drop-first: true

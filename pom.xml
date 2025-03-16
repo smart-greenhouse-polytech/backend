@@ -78,6 +78,16 @@
 			<artifactId>spring-boot-docker-compose</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.minidev</groupId>
+			<artifactId>json-smart</artifactId>
+			<version>2.4.10</version> <!-- Используйте последнюю стабильную версию -->
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -85,15 +95,29 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
-			<dependency>
-				<groupId>org.eclipse.paho</groupId>
-				<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-				<version>1.2.5</version>
-			</dependency>
-
+		<dependency>
+			<groupId>org.eclipse.paho</groupId>
+			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.27.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
