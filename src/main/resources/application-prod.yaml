@@ -1,0 +1,18 @@
+spring:
+  docker:
+    compose:
+      enabled: false
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:polytech-smart-greenhouse-postgres}:${DB_PORT:5432}/${DB_NAME:polytech-smart-house}
+    username: ${DB_USER:user}
+    password: ${DB_PASSWORD:password}
+
+mqtt:
+  broker: tcp://${MQTT_HOST:polytech-smart-greenhouse-mosquitto}:${MQTT_PORT:1883}
+  topic: greenhouse/data
+  client-id: "Greenhouse-Prod-${HOSTNAME}"
+
+logging:
+  level:
+    root: ${LOGGING_LEVEL:INFO}

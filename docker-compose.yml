@@ -1,6 +1,6 @@
 services:
   polytech-smart-house-postgres:
-    image: postgres:16
+    image: postgres:16-bookworm
     container_name: polytech-smart-house-postgres
     environment:
       POSTGRES_DB: "polytech-smart-house"
@@ -10,9 +10,14 @@ services:
       - "5432:5432"
     networks:
       - polytech-smart-house-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d polytech-smart-house" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   polytech-smart-house-mosquitto:
-    image: eclipse-mosquitto:latest
+    image: eclipse-mosquitto:2.0.18
     container_name: polytech-smart-house-mosquitto
     restart: always
     ports:
@@ -24,6 +29,11 @@ services:
       - ./mosquitto/log:/mosquitto/log
     networks:
       - polytech-smart-house-network
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "1883" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   polytech-smart-house-network:
