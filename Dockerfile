@@ -2,7 +2,7 @@
 FROM --platform=linux/arm64 maven:3.9.6 AS build
 WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
 # Финальный образ
 FROM --platform=linux/arm64 eclipse-temurin:21-jre-jammy
