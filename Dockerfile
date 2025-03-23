@@ -1,11 +1,11 @@
 # Сборка
-FROM maven:3.9.6 AS build
+FROM --platform=linux/arm64 maven:3.9.6 AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
 # Финальный образ
-FROM eclipse-temurin:21-jre-jammy
+FROM --platform=linux/arm64 eclipse-temurin:21-jre-jammy
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
