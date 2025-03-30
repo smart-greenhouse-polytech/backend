@@ -23,22 +23,21 @@ data class BedEntity(
     @UuidGenerator
     var id: UUID,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "greenhouse_id")
-    var greenhouse: GreenhouseEntity,
+    var greenhouse: GreenhouseEntity?,
 
     var name: String,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crops_id")
     var crop: CropEntity?,
 
     @OneToMany(mappedBy = "bed", fetch = FetchType.LAZY)
-    var devices: MutableList<DeviceEntity> = mutableListOf(),
+    var devices: MutableList<DeviceEntity>? = mutableListOf(),
 
     @CreationTimestamp
     var createdAt: LocalDateTime,
-
     @UpdateTimestamp
     var updatedAt: LocalDateTime
 )
