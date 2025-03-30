@@ -1,4 +1,4 @@
-package ru.polytech.smart.greenhouse.configuration
+package ru.polytech.smart.greenhouse.mqtt
 
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions

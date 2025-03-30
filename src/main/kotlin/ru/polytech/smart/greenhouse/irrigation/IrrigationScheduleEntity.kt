@@ -1,35 +1,45 @@
 package ru.polytech.smart.greenhouse.irrigation
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.hibernate.annotations.UuidGenerator
 import ru.polytech.smart.greenhouse.bed.BedEntity
 import java.time.LocalDateTime
-import java.util.UUID
+import java.time.LocalTime
+import java.util.*
 
 @Entity
 @Table(name = "irrigation_schedule")
 data class IrrigationScheduleEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    @Schema(description = "Уникальный идентификатор расписания полива")
+    var id: UUID = UUID.randomUUID(),
 
     @ManyToOne
     @JoinColumn(name = "bed_id")
-    var bed: BedEntity,
+    @Schema(description = "Грядка для полива")
+    var bed: BedEntity? = null,
 
+    @Schema(description = "Дни недели для полива (через запятую, 1-7 где 1-понедельник)")
     var daysOfWeek: String,
-    var startTime: LocalDateTime,
-    var endTime: LocalDateTime,
+
+    @Schema(description = "Время начала полива")
+    var startTime: LocalTime,
+
+    @Schema(description = "Требуемый объем воды в литрах")
+    var requiredVolumeLiters: Double,
+
+    @Schema(description = "Активно ли расписание")
+    var isActive: Boolean = true,
 
     @CreationTimestamp
-    var createdAt: LocalDateTime,
+    @Schema(description = "Дата создания записи", accessMode = Schema.AccessMode.READ_ONLY)
+    var createdAt: LocalDateTime? = null,
 
     @UpdateTimestamp
-    var updatedAt: LocalDateTime
+    @Schema(description = "Дата последнего обновления", accessMode = Schema.AccessMode.READ_ONLY)
+    var updatedAt: LocalDateTime? = null
 )

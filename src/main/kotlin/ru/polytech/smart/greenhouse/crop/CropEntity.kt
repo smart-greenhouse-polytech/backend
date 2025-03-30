@@ -1,5 +1,6 @@
 package ru.polytech.smart.greenhouse.crop
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
@@ -17,8 +18,11 @@ data class CropEntity(
     var id: UUID,
 
     var name: String,
-    var waterRequirement: Double,
+
+    var waterRequirementLiters: Double,
+
     var tempMin: Double,
+
     var tempMax: Double,
 
     @CreationTimestamp

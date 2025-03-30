@@ -1,12 +1,12 @@
 package ru.polytech.smart.greenhouse.device
 
-import jakarta.persistence.Entity
+import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.Embedded
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.hibernate.annotations.UuidGenerator
@@ -15,14 +15,7 @@ import ru.polytech.smart.greenhouse.greenhouse.GreenhouseEntity
 import java.time.LocalDateTime
 import java.util.UUID
 
-import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Column
-import jakarta.persistence.Embeddable
-import jakarta.persistence.Embedded
-
-@Entity
-@Table(name = "devices")
-data class DeviceEntity(
+data class DeviceTo(
     @Id
     @UuidGenerator
     @Schema(
@@ -93,15 +86,4 @@ data class DeviceEntity(
         accessMode = Schema.AccessMode.READ_ONLY
     )
     var updatedAt: LocalDateTime
-)
-
-@Embeddable
-data class Credentials(
-    @Column(name = "mqtt_username")
-    @Schema(description = "Имя пользователя для mqtt")
-    val username: String,
-
-    @Column(name = "mqtt_password")
-    @Schema(description = "Пароль пользователя для mqtt")
-    val password: String
 )
