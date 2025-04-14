@@ -2,7 +2,6 @@ package ru.polytech.smart.greenhouse.bed
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -19,10 +18,6 @@ interface BedController {
     @Operation(
         summary = "Получить все грядки",
         description = "Возвращает список всех грядок",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Успешное получение списка"),
-            ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
-        ]
     )
     @GetMapping
     fun getAllBeds(): List<BedTo>
@@ -30,10 +25,6 @@ interface BedController {
     @Operation(
         summary = "Получить грядку по ID",
         description = "Возвращает грядку по указанному идентификатору",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Грядка найдена"),
-            ApiResponse(responseCode = "404", description = "Грядка не найдена")
-        ]
     )
     @GetMapping("/{id}")
     fun getBedById(
@@ -44,10 +35,6 @@ interface BedController {
     @Operation(
         summary = "Создать новую грядку",
         description = "Создает новую грядку с указанными параметрами",
-        responses = [
-            ApiResponse(responseCode = "201", description = "Грядка успешно создана"),
-            ApiResponse(responseCode = "400", description = "Некорректные параметры запроса")
-        ]
     )
     @PostMapping
     fun createBed(
@@ -58,11 +45,6 @@ interface BedController {
     @Operation(
         summary = "Обновить грядку",
         description = "Обновляет данные существующей грядки",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Грядка успешно обновлена"),
-            ApiResponse(responseCode = "404", description = "Грядка не найдена"),
-            ApiResponse(responseCode = "400", description = "Некорректные параметры запроса")
-        ]
     )
     @PutMapping("/{id}")
     fun updateBed(
@@ -76,10 +58,6 @@ interface BedController {
     @Operation(
         summary = "Удалить грядку",
         description = "Удаляет грядку по указанному идентификатору",
-        responses = [
-            ApiResponse(responseCode = "204", description = "Грядка успешно удалена"),
-            ApiResponse(responseCode = "404", description = "Грядка не найдена")
-        ]
     )
     @DeleteMapping("/{id}")
     fun deleteBed(

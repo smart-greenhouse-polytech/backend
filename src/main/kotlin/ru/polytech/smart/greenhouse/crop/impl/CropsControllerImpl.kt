@@ -7,7 +7,8 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.polytech.smart.greenhouse.crop.CropEntity
+import ru.polytech.smart.greenhouse.crop.CropTo
+import ru.polytech.smart.greenhouse.crop.CropMapper
 import ru.polytech.smart.greenhouse.crop.CropsController
 import ru.polytech.smart.greenhouse.crop.CropsRepository
 import java.util.UUID
@@ -17,37 +18,35 @@ import java.util.UUID
 @CrossOrigin
 @RequiredArgsConstructor
 class CropsControllerImpl(
-    private val cropsRepository: CropsRepository
+    private val cropsRepository: CropsRepository,
+    private val cropsMapper: CropMapper,
 ) : CropsController {
 
     @Transactional(readOnly = true)
-    override fun getCrops(): List<CropEntity> {
-        return cropsRepository.findAll()
+    override fun getCrops(): List<CropTo> {
+        return cropsMapper.toDto(cropsRepository.findAll())
     }
 
     @Transactional(readOnly = true)
-    override fun getCropById(id: UUID): ResponseEntity<CropEntity> {
+    override fun getCropById(id: UUID): ResponseEntity<CropTo> {
         return cropsRepository.findById(id)
-            .map { ResponseEntity.ok(it) }
+            .map { ResponseEntity.ok(cropsMapper.toDto(it)) }
             .orElse(ResponseEntity.notFound().build())
     }
 
     @Transactional
-    override fun createCrop(crop: CropEntity): ResponseEntity<CropEntity> {
-        crop.id = UUID.randomUUID()
-        val savedCrop = cropsRepository.save(crop)
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCrop)
+    override fun createCrop(crop: CropTo): ResponseEntity<CropTo> {
+        val savedCrop = cropsRepository.save(cropsMapper.toEntity(crop))
+        return ResponseEntity.status(HttpStatus.CREATED).body(cropsMapper.toDto(savedCrop))
     }
 
     @Transactional
-    override fun updateCrop(id: UUID, crop: CropEntity): ResponseEntity<CropEntity> {
-        return if (cropsRepository.existsById(id)) {
-            crop.id = id
-            val updatedCrop = cropsRepository.save(crop)
-            ResponseEntity.ok(updatedCrop)
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    override fun updateCrop(id: UUID, crop: CropTo): ResponseEntity<CropTo> {
+        return cropsRepository.findById(id)
+            .map { existingEntity ->
+                cropsMapper.updateEntityFromDto(existingEntity, crop)
+                ResponseEntity.ok(cropsMapper.toDto(cropsRepository.save(existingEntity)))
+            }.orElse(ResponseEntity.notFound().build())
     }
 
     @Transactional

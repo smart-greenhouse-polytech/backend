@@ -6,23 +6,23 @@ import java.util.UUID
 
 data class CropTo(
     @Schema(description = "Уникальный идентификатор культуры")
-    var id: UUID?,
+    var id: UUID? = null,
 
     @Schema(description = "Название культуры", required = true)
-    val name: String,
+    val name: String?,
 
     @Schema(description = "Требуемое количество воды (л/день)", required = true)
-    val waterRequirementLiters: Double,
+    val waterRequirementLiters: Double?,
 
     @Schema(description = "Минимальная температура (°C)", required = true)
-    val tempMin: Double,
+    val tempMin: Double?,
 
     @Schema(description = "Максимальная температура (°C)", required = true)
-    val tempMax: Double,
+    val tempMax: Double?,
 
     @Schema(description = "Дата создания записи", accessMode = Schema.AccessMode.READ_ONLY)
-    val createdAt: LocalDateTime?,
+    val createdAt: LocalDateTime? = null,
 
     @Schema(description = "Дата последнего обновления", accessMode = Schema.AccessMode.READ_ONLY)
-    val updatedAt: LocalDateTime?
+    val updatedAt: LocalDateTime? = null
 )

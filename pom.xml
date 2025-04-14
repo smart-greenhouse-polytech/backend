@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ru.polytech</groupId>
 	<artifactId>smart-greenhouse</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>smart-greenhouse</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -196,7 +196,23 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-swagger</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>get</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+
+
 
 </project>

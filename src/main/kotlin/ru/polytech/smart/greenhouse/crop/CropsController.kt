@@ -19,50 +19,33 @@ interface CropsController {
     @Operation(
         summary = "Получить все культуры",
         description = "Возвращает список всех культур",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Успешное получение списка"),
-            ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
-        ]
     )
     @GetMapping
-    fun getCrops(): List<CropEntity>
+    fun getCrops(): List<CropTo>
 
     @Operation(
         summary = "Получить культуру по ID",
         description = "Возвращает культуру по указанному идентификатору",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Культура найдена"),
-            ApiResponse(responseCode = "404", description = "Культура не найдена")
-        ]
     )
     @GetMapping("/{id}")
     fun getCropById(
         @Parameter(description = "ID культуры", required = true)
         @PathVariable id: UUID
-    ): ResponseEntity<CropEntity>
+    ): ResponseEntity<CropTo>
 
     @Operation(
         summary = "Создать новую культуру",
         description = "Создает новую культуру с указанными параметрами",
-        responses = [
-            ApiResponse(responseCode = "201", description = "Культура успешно создана"),
-            ApiResponse(responseCode = "400", description = "Некорректные параметры запроса")
-        ]
     )
     @PostMapping
     fun createCrop(
         @Parameter(description = "Данные новой культуры", required = true)
-        @RequestBody crop: CropEntity
-    ): ResponseEntity<CropEntity>
+        @RequestBody crop: CropTo
+    ): ResponseEntity<CropTo>
 
     @Operation(
         summary = "Обновить культуру",
         description = "Обновляет данные существующей культуры",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Культура успешно обновлена"),
-            ApiResponse(responseCode = "404", description = "Культура не найдена"),
-            ApiResponse(responseCode = "400", description = "Некорректные параметры запроса")
-        ]
     )
     @PutMapping("/{id}")
     fun updateCrop(
@@ -70,16 +53,12 @@ interface CropsController {
         @PathVariable id: UUID,
 
         @Parameter(description = "Обновленные данные культуры", required = true)
-        @RequestBody crop: CropEntity
-    ): ResponseEntity<CropEntity>
+        @RequestBody crop: CropTo
+    ): ResponseEntity<CropTo>
 
     @Operation(
         summary = "Удалить культуру",
         description = "Удаляет культуру по указанному идентификатору",
-        responses = [
-            ApiResponse(responseCode = "204", description = "Культура успешно удалена"),
-            ApiResponse(responseCode = "404", description = "Культура не найдена")
-        ]
     )
     @DeleteMapping("/{id}")
     fun deleteCrop(

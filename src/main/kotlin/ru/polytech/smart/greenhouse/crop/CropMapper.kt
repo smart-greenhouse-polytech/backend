@@ -1,20 +1,30 @@
 package ru.polytech.smart.greenhouse.crop
 
-import org.mapstruct.Mapper
-import org.mapstruct.Mapping
-import org.mapstruct.NullValuePropertyMappingStrategy
+import org.springframework.stereotype.Component
+import java.util.UUID
 
-@Mapper(
-    componentModel = "spring",
-    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
-)
-interface CropMapper {
-    fun toDto(entity: CropEntity): CropTo
+@Component
+class CropMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    fun toEntity(bedTo: CropTo): CropEntity
+    fun toDto(entity: CropEntity): CropTo = CropTo(
+        id = entity.id,
+        name = entity.name,
+        tempMin = entity.tempMin,
+        tempMax = entity.tempMax,
+        waterRequirementLiters = entity.waterRequirementLiters,
+    )
 
-    fun toDto(bedEntities: List<CropEntity>): List<CropTo>
+    fun toEntity(to: CropTo): CropEntity = CropEntity(
+        id = UUID.randomUUID(),
+        name = to.name ?: throw IllegalArgumentException("Crop name must not be null"),
+        tempMin = to.tempMin ?: throw IllegalArgumentException("Crop tempMin must not be null"),
+        tempMax = to.tempMax ?: throw IllegalArgumentException("Crop tempMax must not be null"),
+        waterRequirementLiters = to.waterRequirementLiters ?: throw IllegalArgumentException("Crop waterRequirementLiters must not be null"),
+    )
+
+    fun updateEntityFromDto(entity: CropEntity, dto: CropTo) {
+        dto.name?.let { entity.name = it }
+    }
+
+    fun toDto(entities: List<CropEntity>): List<CropTo> = entities.map(this::toDto)
 }

@@ -41,15 +41,14 @@ class BedControllerImpl(
         .let(bedMapper::toDto)
         .let { ResponseEntity.status(HttpStatus.CREATED).body(it) }
 
+
     @Transactional
     override fun updateBed(id: UUID, bed: BedTo): ResponseEntity<BedTo> {
-        return if (bedRepository.existsById(id)) {
-            bed.id = id
-            val updatedBed = bedRepository.save(bedMapper.toEntity(bed))
-            ResponseEntity.ok(bedMapper.toDto(updatedBed))
-        } else {
-            ResponseEntity.notFound().build()
-        }
+        return bedRepository.findById(id)
+            .map { existingEntity ->
+                bedMapper.updateEntityFromDto(existingEntity, bed)
+                ResponseEntity.ok(bedMapper.toDto(bedRepository.save(existingEntity)))
+            }.orElse(ResponseEntity.notFound().build())
     }
 
     @Transactional

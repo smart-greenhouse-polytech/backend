@@ -8,19 +8,19 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 
-@Configuration
-@Component
-class MqttClientConfig{
-
-    @Bean
-    fun mqttClient(
-        @Value("\${mqtt.broker}") brokerUrl: String,
-        @Value("\${mqtt.client-id}") clientId: String
-    ): MqttClient {
-        val client = MqttClient(brokerUrl, clientId, MemoryPersistence())
-        val options = MqttConnectOptions()
-        options.isCleanSession = true
-        client.connect(options)
-        return client
-    }
-}
+//@Configuration
+//@Component
+//class MqttClientConfig{
+//
+//    @Bean
+//    fun mqttClient(
+//        @Value("\${mqtt.broker}") brokerUrl: String,
+//        @Value("\${mqtt.client-id}") clientId: String
+//    ): MqttClient {
+//        val client = MqttClient(brokerUrl, clientId, MemoryPersistence())
+//        val options = MqttConnectOptions()
+//        options.isCleanSession = true
+//        client.connect(options)
+//        return client
+//    }
+//}

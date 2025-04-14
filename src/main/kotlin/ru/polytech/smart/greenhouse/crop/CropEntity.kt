@@ -1,6 +1,5 @@
 package ru.polytech.smart.greenhouse.crop
 
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
@@ -15,7 +14,7 @@ import java.util.UUID
 data class CropEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    var id: UUID? = null,
 
     var name: String,
 
@@ -26,8 +25,8 @@ data class CropEntity(
     var tempMax: Double,
 
     @CreationTimestamp
-    var createdAt: LocalDateTime,
+    var createdAt: LocalDateTime? = null,
 
     @UpdateTimestamp
-    var updatedAt: LocalDateTime
+    var updatedAt: LocalDateTime? = null
 )

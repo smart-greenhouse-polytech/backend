@@ -1,36 +1,51 @@
 package ru.polytech.smart.greenhouse.irrigation.impl
 
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import ru.polytech.smart.greenhouse.irrigation.IrrigationMapper
 import ru.polytech.smart.greenhouse.irrigation.IrrigationScheduleController
-import ru.polytech.smart.greenhouse.irrigation.IrrigationScheduleEntity
-import ru.polytech.smart.greenhouse.irrigation.IrrigationScheduleService
+import ru.polytech.smart.greenhouse.irrigation.IrrigationScheduleRepository
+import ru.polytech.smart.greenhouse.irrigation.IrrigationScheduleTo
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/v1/irrigation-schedules")
 class IrrigationScheduleControllerImpl(
-    private val irrigationService: IrrigationScheduleService
+    private val scheduleRepository: IrrigationScheduleRepository,
+    private val irrigationMapper: IrrigationMapper
 ) : IrrigationScheduleController {
 
-    override fun createSchedule(entity: IrrigationScheduleEntity) =
-        ResponseEntity.ok(irrigationService.createSchedule(entity))
-
-    override fun getSchedule(id: UUID) =
-        ResponseEntity.ok(irrigationService.getSchedule(id))
-
-    override fun getAllSchedules() =
-        ResponseEntity.ok(irrigationService.getAllSchedules())
-
-    override fun updateSchedule(id: UUID, entity: IrrigationScheduleEntity) =
-        ResponseEntity.ok(irrigationService.updateSchedule(id, entity))
-
-    override fun deleteSchedule(id: UUID): ResponseEntity<Void> {
-        irrigationService.deleteSchedule(id)
-        return ResponseEntity.noContent().build()
+    override fun createSchedule(dto: IrrigationScheduleTo): ResponseEntity<IrrigationScheduleTo> {
+        val entity = irrigationMapper.toEntity(dto)
+        return ResponseEntity.ok(irrigationMapper.toDto(scheduleRepository.save(entity)))
     }
 
-    override fun toggleSchedule(id: UUID) =
-        ResponseEntity.ok(irrigationService.toggleSchedule(id))
+    override fun getAllSchedules(): List<IrrigationScheduleTo> {
+        return scheduleRepository.findAll().map { irrigationMapper.toDto(it) }
+    }
+
+    override fun getSchedule(id: UUID): ResponseEntity<IrrigationScheduleTo> {
+        return scheduleRepository.findById(id)
+            .map { ResponseEntity.ok(irrigationMapper.toDto(it)) }
+            .orElse(ResponseEntity.notFound().build())
+    }
+
+    override fun updateSchedule(
+        id: UUID,
+        dto: IrrigationScheduleTo
+    ): ResponseEntity<IrrigationScheduleTo> {
+        return scheduleRepository.findById(id)
+            .map { existing ->
+                irrigationMapper.updateEntityFromDto(existing, dto)
+                ResponseEntity.ok(irrigationMapper.toDto(scheduleRepository.save(existing)))
+            }.orElse(ResponseEntity.notFound().build())
+    }
+
+    override fun deleteSchedule(id: UUID): ResponseEntity<Void> {
+        return if (scheduleRepository.existsById(id)) {
+            scheduleRepository.deleteById(id)
+            ResponseEntity.noContent().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
+    }
 }

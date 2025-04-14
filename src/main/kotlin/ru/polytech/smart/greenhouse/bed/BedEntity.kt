@@ -21,7 +21,7 @@ import java.util.UUID
 data class BedEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    var id: UUID = UUID.randomUUID(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "greenhouse_id")
@@ -37,7 +37,7 @@ data class BedEntity(
     var devices: MutableList<DeviceEntity>? = mutableListOf(),
 
     @CreationTimestamp
-    var createdAt: LocalDateTime,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
     @UpdateTimestamp
-    var updatedAt: LocalDateTime
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
 )

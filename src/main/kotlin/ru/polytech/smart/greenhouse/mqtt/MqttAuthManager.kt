@@ -7,10 +7,10 @@ import ru.polytech.smart.greenhouse.device.DeviceEntity
 import ru.polytech.smart.greenhouse.device.DeviceType
 import ru.polytech.smart.greenhouse.mqtt.exception.MqttConfigException
 
-// MqttAuthManager.kt
-@Service
-class MqttAuthManager {
-    private val logger = LoggerFactory.getLogger(javaClass)
+//// MqttAuthManager.kt
+//@Service
+//class MqttAuthManager {
+//    private val logger = LoggerFactory.getLogger(javaClass)
 
 //    fun configureDeviceAccess(device: DeviceEntity) {
 //        val aclRules = when (device.type) {
@@ -102,5 +102,6 @@ class MqttAuthManager {
 //            logger.error("Failed to execute command in container: ${e.message}")
 //            throw MqttConfigException("Container command error", e)
 //        }
+/*
 //    }
-}
+}*/

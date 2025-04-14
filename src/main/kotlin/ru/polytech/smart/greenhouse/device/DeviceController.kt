@@ -5,10 +5,15 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import ru.polytech.smart.greenhouse.bed.BedTo
 import java.util.UUID
 
 @Tag(name = "Device Management", description = "API для управления устройствами и получения данных")
@@ -18,35 +23,57 @@ interface DeviceController {
     @Operation(
         summary = "Получить все устройства",
         description = "Возвращает список всех зарегистрированных устройств",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Успешное получение списка"),
-            ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
-        ]
     )
     @GetMapping
-    fun getAllDevices(): List<DeviceEntity>
+    fun getAllDevices(): List<DeviceTo>
+
+    @Operation(
+        summary = "Зарегестрировать новое устройство",
+        description = "Возвращает устройство по указанному идентификатору",
+        tags = ["Experimental"]
+    )
+    @PostMapping
+    fun registerDevice(
+        @Parameter(description = "ID устройства", required = true)
+        @RequestBody deviceTo: DeviceTo
+    ): ResponseEntity<DeviceTo>
 
     @Operation(
         summary = "Получить устройство по ID",
         description = "Возвращает устройство по указанному идентификатору",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Устройство найдено"),
-            ApiResponse(responseCode = "404", description = "Устройство не найдено")
-        ]
     )
     @GetMapping("/{id}")
     fun getDevice(
         @Parameter(description = "ID устройства", required = true)
         @PathVariable id: UUID
-    ): ResponseEntity<DeviceEntity>
+    ): ResponseEntity<DeviceTo>
 
     @Operation(
-        summary = "Получить измерения",
-        description = "Возвращает историю измерений за указанный период",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Измерения получены"),
-            ApiResponse(responseCode = "404", description = "Устройство не найдено")
-        ]
+        summary = "Получить устройство по ID",
+        description = "Возвращает устройство по указанному идентификатору",
+    )
+    @PutMapping("/{id}")
+    fun updateDevice(
+        @Parameter(description = "ID устройства", required = true)
+        @PathVariable id: UUID,
+
+        @Parameter(description = "Новые данные для устройства", required = true)
+        @RequestBody deviceTo: DeviceTo
+    ): ResponseEntity<DeviceTo>
+
+    @Operation(
+        summary = "Удалить устройство по ID",
+        description = "Удаляет устройство по ID",
+    )
+    @DeleteMapping("/{id}")
+    fun deleteDevice(
+        @Parameter(description = "ID устройства", required = true)
+        @PathVariable id: UUID
+    ): ResponseEntity<Void>
+
+    @Operation(
+        summary = "Получить измерения устройства",
+        description = "Возвращает историю измерений для отдельного устройства за указанный период",
     )
     @GetMapping("/{id}/measurements")
     fun getMeasurements(
@@ -55,5 +82,13 @@ interface DeviceController {
 
         @Parameter(description = "Период в часах", example = "24")
         @RequestParam(defaultValue = "24") hours: Int
-    ): List<DeviceMeasurementEntity>
+    ): List<DeviceMeasurementTo>
+
+    @Operation(
+        summary = "Получить текущие измерения в теплице",
+        description = "Возвращает среднее значение всех измерений в данный момент",
+        tags = ["Experimental"]
+    )
+    @GetMapping("/measurements")
+    fun getCurrentMeasurements(): List<DeviceMeasurementTo>
 }

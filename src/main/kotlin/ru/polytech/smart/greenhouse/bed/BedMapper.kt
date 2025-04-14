@@ -1,42 +1,55 @@
 package ru.polytech.smart.greenhouse.bed
 
-import org.mapstruct.AfterMapping
-import org.mapstruct.Mapper
-import org.mapstruct.Mapping
-import org.mapstruct.MappingTarget
-import org.mapstruct.NullValuePropertyMappingStrategy
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import ru.polytech.smart.greenhouse.crop.CropsRepository
+import ru.polytech.smart.greenhouse.device.DeviceRepository
 import ru.polytech.smart.greenhouse.greenhouse.GreenhouseRepository
 
-@Mapper(
-    componentModel = "spring",
-    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
-)
-abstract class BedMapper {
+@Component
+class BedMapper(
+    private val greenhouseRepository: GreenhouseRepository,
+    private val cropsRepository: CropsRepository,
+    private val deviceRepository: DeviceRepository
+) {
 
-    @Autowired
-    protected lateinit var greenhouseRepository: GreenhouseRepository
-    @Autowired
-    protected lateinit var cropsRepository: CropsRepository
+    fun toDto(entity: BedEntity): BedTo = BedTo(
+        greenhouseId = entity.greenhouse?.id,
+        name = entity.name,
+        cropId = entity.crop?.id,
+        deviceIds = entity.devices?.map { it.id } ?: emptyList(),
+    )
 
-    @Mapping(target = "greenhouseId", source = "greenhouse.id")
-    @Mapping(target = "cropId", source = "crop.id")
-    @Mapping(target = "deviceIds", expression = "java(entity.getDevices().stream().map(ru.polytech.smart.greenhouse.device.DeviceEntity::getId).collect(java.util.stream.Collectors.toList()))")
-    abstract fun toDto(entity: BedEntity): BedTo
+    fun toDto(entities: List<BedEntity>): List<BedTo> = entities.map { toDto(it) }
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "greenhouse", ignore = true)
-    @Mapping(target = "crop", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    abstract fun toEntity(bedTo: BedTo): BedEntity
+    fun toEntity(to: BedTo): BedEntity {
+        return BedEntity(
+            greenhouse = null,      // будет заполняться отдельно
+            name = to.name ?: throw IllegalArgumentException("Name must not be null"),
+            crop = null,
+            devices = mutableListOf(),
+        ).apply {
+            updateEntityFromDto(this, to)
+        }
+    }
 
-    abstract fun toDto(bedEntities: List<BedEntity>): List<BedTo>
+    fun updateEntityFromDto(entity: BedEntity, dto: BedTo) {
+        dto.name?.let { entity.name = it }
 
-    @AfterMapping
-    fun afterMapping(bedTo: BedTo, @MappingTarget entity: BedEntity) {
-        bedTo.greenhouseId?.let { entity.greenhouse = greenhouseRepository.getReferenceById(it) }
-        bedTo.cropId?.let { entity.crop = cropsRepository.getReferenceById(it) }
+        dto.greenhouseId?.let {
+            entity.greenhouse = greenhouseRepository.findById(it)
+                .orElseThrow { IllegalArgumentException("Greenhouse with ID $it not found") }
+        }
+
+        dto.cropId?.let {
+            entity.crop = cropsRepository.findById(it)
+                .orElseThrow { IllegalArgumentException("Crop with ID $it not found") }
+        }
+
+        dto.deviceIds?.takeIf { it.isNotEmpty() }?.let { deviceIds ->
+            entity.devices = deviceIds.map { deviceId ->
+                deviceRepository.findById(deviceId)
+                    .orElseThrow { IllegalArgumentException("Device with ID $deviceId not found") }
+            }.toMutableList()
+        }
     }
 }

@@ -6,13 +6,13 @@ import java.util.UUID
 
 data class BedTo(
     @Schema(description = "Уникальный идентификатор грядки")
-    var id: UUID,
+    var id: UUID? = null,
 
     @Schema(description = "ID теплицы", required = true)
     val greenhouseId: UUID?,
 
     @Schema(description = "Название грядки", example = "Грядка №1", required = true)
-    val name: String,
+    val name: String?,
 
     @Schema(description = "ID культуры", nullable = true)
     val cropId: UUID?,
@@ -21,8 +21,8 @@ data class BedTo(
     val deviceIds: List<UUID>?,
 
     @Schema(description = "Дата создания записи", accessMode = Schema.AccessMode.READ_ONLY)
-    val createdAt: LocalDateTime?,
+    val createdAt: LocalDateTime? = null,
 
     @Schema(description = "Дата последнего обновления", accessMode = Schema.AccessMode.READ_ONLY)
-    val updatedAt: LocalDateTime?
+    val updatedAt: LocalDateTime? = null,
 )
