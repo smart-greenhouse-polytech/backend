@@ -1,5 +1,8 @@
 package ru.polytech.smart.greenhouse.device
 
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -20,25 +23,43 @@ import java.util.UUID
 data class DeviceEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    var id: UUID = UUID.randomUUID(),
 
     var name: String,
-    var type: String,
+
+    val deviceId: String? = null,
+
+    val macAddress: String? = null,
+
+    @Enumerated(EnumType.STRING)
+    var type: DeviceType,
 
     @ManyToOne
     @JoinColumn(name = "greenhouse_id")
-    var greenhouse: GreenhouseEntity,
+    var greenhouse: GreenhouseEntity? = null,
 
     @Enumerated(EnumType.STRING)
     var status: DeviceStatus = DeviceStatus.INACTIVE,
 
     @ManyToOne
     @JoinColumn(name = "bed_id")
-    var bed: BedEntity?,
+    var bed: BedEntity? = null,
+
+    @Embedded
+    val credentials: Credentials? = null,
 
     @CreationTimestamp
-    var createdAt: LocalDateTime,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @UpdateTimestamp
-    var updatedAt: LocalDateTime
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
+)
+
+@Embeddable
+data class Credentials(
+    @Column(name = "mqtt_username")
+    val username: String,
+
+    @Column(name = "mqtt_password")
+    val password: String
 )

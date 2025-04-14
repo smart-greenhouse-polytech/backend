@@ -14,16 +14,19 @@ import java.util.UUID
 data class CropEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    var id: UUID? = null,
 
     var name: String,
-    var waterRequirement: Double,
+
+    var waterRequirementLiters: Double,
+
     var tempMin: Double,
+
     var tempMax: Double,
 
     @CreationTimestamp
-    var createdAt: LocalDateTime,
+    var createdAt: LocalDateTime? = null,
 
     @UpdateTimestamp
-    var updatedAt: LocalDateTime
+    var updatedAt: LocalDateTime? = null
 )

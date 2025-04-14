@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp
 import org.hibernate.annotations.UuidGenerator
 import ru.polytech.smart.greenhouse.bed.BedEntity
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.UUID
 
 @Entity
@@ -17,19 +18,23 @@ import java.util.UUID
 data class IrrigationScheduleEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    var id: UUID = UUID.randomUUID(),
 
     @ManyToOne
     @JoinColumn(name = "bed_id")
-    var bed: BedEntity,
+    var bed: BedEntity?,
 
     var daysOfWeek: String,
-    var startTime: LocalDateTime,
-    var endTime: LocalDateTime,
+
+    var startTime: LocalTime,
+
+    var requiredVolumeLiters: Double,
+
+    var isActive: Boolean,
 
     @CreationTimestamp
-    var createdAt: LocalDateTime,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @UpdateTimestamp
-    var updatedAt: LocalDateTime
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
 )
