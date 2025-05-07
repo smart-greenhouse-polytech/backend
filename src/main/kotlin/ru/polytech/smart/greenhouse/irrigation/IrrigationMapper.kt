@@ -32,7 +32,7 @@ class IrrigationMapper(
             bed = bed,
             startTime = dto.startTime ?: throw IllegalArgumentException("Start time must not be null"),
             endTime = dto.endTime ?: throw IllegalArgumentException("requiredVolumeLiters must not be null"),
-            daysOfWeek = dto.daysOfWeek ?: throw IllegalArgumentException("daysOfWeek must not be null"),
+            daysOfWeek = dto.daysOfWeek,
             isActive = dto.isActive ?: false,
         )
     }

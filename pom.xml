@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ru.polytech</groupId>
 	<artifactId>smart-greenhouse</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>smart-greenhouse</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -207,9 +207,13 @@
 						<goals>
 							<goal>get</goal>
 						</goals>
+						<configuration>
+							<artifact>io.swagger:swagger-annotations:1.6.2</artifact>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 
