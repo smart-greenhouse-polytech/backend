@@ -28,7 +28,7 @@ interface DeviceController {
     fun getAllDevices(): List<DeviceTo>
 
     @Operation(
-        summary = "Зарегестрировать новое устройство",
+        summary = "Зарегистрировать новое устройство",
         description = "Возвращает устройство по указанному идентификатору",
         tags = ["Experimental"]
     )

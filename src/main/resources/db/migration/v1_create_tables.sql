@@ -82,13 +82,17 @@ CREATE TABLE device_measurement
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
+CREATE TYPE DAY_OF_WEEK AS ENUM (
+    'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'
+);
+
 CREATE TABLE irrigation_schedule
 (
     id                     UUID PRIMARY KEY   DEFAULT gen_random_uuid(),
     bed_id                 UUID      REFERENCES beds (id) ON DELETE SET NULL,
-    days_of_week           VARCHAR   NOT NULL,
-    required_volume_liters DECIMAL   NOT NULL,
+    days_of_week           DAY_OF_WEEK[]   NOT NULL,
     start_time             TIMESTAMP NOT NULL,
+    end_time               TIMESTAMP NOT NULL,
     is_active              BOOLEAN   NOT NULL,
     created_at             TIMESTAMP NOT NULL DEFAULT now(),
     updated_at             TIMESTAMP NOT NULL DEFAULT now()

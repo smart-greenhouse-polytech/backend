@@ -1,10 +1,6 @@
 package ru.polytech.smart.greenhouse.irrigation
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.hibernate.annotations.UuidGenerator
@@ -24,17 +20,23 @@ data class IrrigationScheduleEntity(
     @JoinColumn(name = "bed_id")
     var bed: BedEntity?,
 
+    @Column(name = "days_of_week")
     var daysOfWeek: String,
 
-    var startTime: LocalTime,
+    @Column(name = "start_time")
+    var startTime: LocalDateTime,
 
-    var requiredVolumeLiters: Double,
+    @Column(name = "end_time")
+    var endTime: LocalDateTime,
 
+    @Column(name = "is_active")
     var isActive: Boolean,
 
     @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @UpdateTimestamp
-    var updatedAt: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 )
