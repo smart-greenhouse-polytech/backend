@@ -114,14 +114,6 @@ VALUES
     ('Greenhouse C', 'Location 3', (SELECT id FROM greenhouse_setting WHERE temp_min = 10.0 LIMIT 1)),
     ('Greenhouse D', 'Location 4', (SELECT id FROM greenhouse_setting WHERE temp_min = 20.0 LIMIT 1));
 
--- Вставка тестовых данных в таблицу greenhouse_owners
-INSERT INTO greenhouse_owners (greenhouse_id, role, user_id)
-VALUES
-    ((SELECT id FROM greenhouses WHERE name = 'Greenhouse A' LIMIT 1), 'Owner', 'user1'),
-    ((SELECT id FROM greenhouses WHERE name = 'Greenhouse B' LIMIT 1), 'Manager', 'user2'),
-    ((SELECT id FROM greenhouses WHERE name = 'Greenhouse C' LIMIT 1), 'Owner', 'user3'),
-    ((SELECT id FROM greenhouses WHERE name = 'Greenhouse D' LIMIT 1), 'Supervisor', 'user4');
-
 -- Вставка тестовых данных в таблицу crops
 INSERT INTO crops (name, water_requirement_liters, temp_min, temp_max)
 VALUES
@@ -154,10 +146,10 @@ VALUES
     ((SELECT id FROM devices WHERE name = 'Fan 1' LIMIT 1), 30.0),
     ((SELECT id FROM devices WHERE name = 'Window 1' LIMIT 1), 15.0);
 
--- Вставка тестовых данных в таблицу irrigation_schedule
+-- Вставка данных в таблицу irrigation_schedule с явным приведением типов
 INSERT INTO irrigation_schedule (bed_id, days_of_week, start_time, end_time, is_active)
 VALUES
-    ((SELECT id FROM beds WHERE name = 'Bed 1' LIMIT 1), ARRAY['MONDAY', 'WEDNESDAY', 'FRIDAY'], '08:00', '10:00', true),
-    ((SELECT id FROM beds WHERE name = 'Bed 2' LIMIT 1), ARRAY['TUESDAY', 'THURSDAY'], '09:00', '11:00', true),
-    ((SELECT id FROM beds WHERE name = 'Bed 3' LIMIT 1), ARRAY['MONDAY', 'THURSDAY'], '07:00', '09:00', false),
-    ((SELECT id FROM beds WHERE name = 'Bed 4' LIMIT 1), ARRAY['WEDNESDAY', 'SATURDAY'], '10:00', '12:00', true);
+    ((SELECT id FROM beds WHERE name = 'Bed 1' LIMIT 1), ARRAY['MONDAY'::day_of_week, 'WEDNESDAY'::day_of_week, 'FRIDAY'::day_of_week], '08:00', '10:00', true),
+    ((SELECT id FROM beds WHERE name = 'Bed 2' LIMIT 1), ARRAY['TUESDAY'::day_of_week, 'THURSDAY'::day_of_week], '09:00', '11:00', true),
+    ((SELECT id FROM beds WHERE name = 'Bed 3' LIMIT 1), ARRAY['MONDAY'::day_of_week, 'THURSDAY'::day_of_week], '07:00', '09:00', false),
+    ((SELECT id FROM beds WHERE name = 'Bed 4' LIMIT 1), ARRAY['WEDNESDAY'::day_of_week, 'SATURDAY'::day_of_week], '10:00', '12:00', true);
