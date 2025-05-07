@@ -17,6 +17,7 @@ class BedMapper(
         name = entity.name,
         cropId = entity.crop?.id,
         deviceIds = entity.devices?.map { it.id } ?: emptyList(),
+        lastIrrigation = entity.lastIrrigation,
     )
 
     fun toDto(entities: List<BedEntity>): List<BedTo> = entities.map { toDto(it) }
@@ -27,6 +28,7 @@ class BedMapper(
             name = to.name ?: throw IllegalArgumentException("Name must not be null"),
             crop = null,
             devices = mutableListOf(),
+            lastIrrigation = null
         ).apply {
             updateEntityFromDto(this, to)
         }

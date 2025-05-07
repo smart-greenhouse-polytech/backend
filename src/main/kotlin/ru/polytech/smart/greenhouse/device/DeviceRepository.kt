@@ -11,6 +11,8 @@ import java.util.*
 @Repository
 interface DeviceRepository : JpaRepository<DeviceEntity, UUID> {
 
+    fun findByName(name: String): Optional<DeviceEntity>
+
     @Query("SELECT d FROM DeviceEntity d WHERE d.greenhouse = :greenhouse")
     fun findByGreenhouse(greenhouse: GreenhouseEntity): List<DeviceEntity>
 
@@ -22,8 +24,4 @@ interface DeviceRepository : JpaRepository<DeviceEntity, UUID> {
 
     @Query("SELECT d FROM DeviceEntity d WHERE d.greenhouse.id = :greenhouseId AND d.type = :type")
     fun findByGreenhouseIdAndType(greenhouseId: UUID, type: DeviceType): List<DeviceEntity>
-
-    fun findByMacAddress(macAddress: String): DeviceEntity?
-
-    fun existsByDeviceId(deviceId: String): Boolean
 }

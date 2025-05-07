@@ -1,16 +1,12 @@
 package ru.polytech.smart.greenhouse.device.impl
 
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.RestController
-import ru.polytech.smart.greenhouse.device.DeviceController
-import ru.polytech.smart.greenhouse.device.DeviceMapper
-import ru.polytech.smart.greenhouse.device.DeviceMeasurementMapper
-import ru.polytech.smart.greenhouse.device.DeviceMeasurementRepository
-import ru.polytech.smart.greenhouse.device.DeviceMeasurementTo
-import ru.polytech.smart.greenhouse.device.DeviceRepository
-import ru.polytech.smart.greenhouse.device.DeviceTo
+import ru.polytech.smart.greenhouse.device.*
 import ru.polytech.smart.greenhouse.greenhouse.GreenhouseTo
+import ru.polytech.smart.greenhouse.mqtt.DeviceControlService
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -20,7 +16,10 @@ class DeviceControllerImpl(
     private val measurementRepository: DeviceMeasurementRepository,
     private val deviceMapper: DeviceMapper,
     private val deviceMeasurementMapper: DeviceMeasurementMapper,
+    private val deviceControlService: DeviceControlService
 ) : DeviceController {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     @Transactional(readOnly = true)
     override fun getAllDevices(): List<DeviceTo> {
@@ -69,5 +68,19 @@ class DeviceControllerImpl(
     @Transactional(readOnly = true)
     override fun getCurrentMeasurements(): List<DeviceMeasurementTo> {
         return deviceMeasurementMapper.toDto(measurementRepository.findAll())
+    }
+
+    override fun controlDevice(id: UUID, command: String): ResponseEntity<String> {
+        val device = deviceRepository.findById(id).orElseThrow()
+
+        val deviceId = DeviceIdentifier(device.type, device.name)
+
+        return try {
+            deviceControlService.sendCommand(deviceId, command)
+            ResponseEntity.ok("Command '${command}' sent to ${device.name} (${device.type})")
+        } catch (e: Exception) {
+            logger.error("Failed to send command", e)
+            ResponseEntity.internalServerError().body("Error: ${e.message}")
+        }
     }
 }

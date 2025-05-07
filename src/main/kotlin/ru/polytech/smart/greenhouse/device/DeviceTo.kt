@@ -19,20 +19,10 @@ data class DeviceTo(
     var id: UUID?,
 
     @Schema(
-        description = "Название устройства",
+        description = "Уникальное наименование устройства",
         required = true
     )
     var name: String?,
-
-    @Schema(
-        description = "Уникальный идентификатор для mosquito"
-    )
-    val deviceId: String?,
-
-    @Schema(
-        description = "Mac адресс устройства"
-    )
-    val macAddress: String?,
 
     @Enumerated(EnumType.STRING)
     @Schema(

@@ -14,7 +14,7 @@ import ru.polytech.smart.greenhouse.bed.BedTo
 import java.util.UUID
 
 @RestController
-@RequestMapping("/v1/beds")
+@RequestMapping("/api/v1/beds")
 @CrossOrigin
 @RequiredArgsConstructor
 class BedControllerImpl(

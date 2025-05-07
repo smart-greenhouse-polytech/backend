@@ -8,6 +8,6 @@ import java.util.UUID
 @Repository
 interface IrrigationScheduleRepository : JpaRepository<IrrigationScheduleEntity, UUID> {
     fun findByBedId(bedId: UUID): List<IrrigationScheduleEntity>
-    fun findByIsActive(isActive: Boolean): List<IrrigationScheduleEntity>
+    fun findAllByIsActive(isActive: Boolean): List<IrrigationScheduleEntity>
     fun findByBedIdAndIsActive(bedId: UUID, isActive: Boolean): List<IrrigationScheduleEntity>
 }

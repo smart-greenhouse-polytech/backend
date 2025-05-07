@@ -1,6 +1,7 @@
 package ru.polytech.smart.greenhouse.irrigation
 
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.UUID
@@ -12,14 +13,14 @@ data class IrrigationScheduleTo(
     @Schema(description = "Идентификатор грядки для полива")
     var bedId: UUID?,
 
-    @Schema(description = "Дни недели для полива (через запятую, 1-7 где 1-понедельник)")
-    var daysOfWeek: String?,
+    @Schema(description = "Дни недели для полива")
+    val daysOfWeek: Set<DayOfWeek> = emptySet(),
 
     @Schema(description = "Время начала полива")
     var startTime: LocalTime?,
 
-    @Schema(description = "Требуемый объем воды в литрах")
-    var requiredVolumeLiters: Double?,
+    @Schema(description = "Время окончания полива")
+    var endTime: LocalTime?,
 
     @Schema(description = "Активно ли расписание")
     var isActive: Boolean?,

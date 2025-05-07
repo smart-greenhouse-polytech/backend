@@ -20,6 +20,9 @@ data class BedTo(
     @Schema(description = "Список ID устройств", nullable = true)
     val deviceIds: List<UUID>?,
 
+    @Schema(description = "Время последнего полива", nullable = true)
+    var lastIrrigation: LocalDateTime?,
+
     @Schema(description = "Дата создания записи", accessMode = Schema.AccessMode.READ_ONLY)
     val createdAt: LocalDateTime? = null,
 

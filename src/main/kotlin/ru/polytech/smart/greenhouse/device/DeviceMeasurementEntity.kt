@@ -15,7 +15,7 @@ import java.util.UUID
 data class DeviceMeasurementEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    var id: UUID = UUID.randomUUID(),
 
     @ManyToOne
     @JoinColumn(name = "device_id")
@@ -24,5 +24,5 @@ data class DeviceMeasurementEntity(
     var value: Double,
 
     @CreationTimestamp
-    var createdAt: LocalDateTime
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 )

@@ -8,9 +8,10 @@ spring:
     password: ${DB_PASSWORD:password}
 
 mqtt:
-  broker: tcp://${MQTT_HOST:polytech-smart-greenhouse-mosquitto}:${MQTT_PORT:1883}
-  topic: greenhouse/data
-  client-id: "Greenhouse-Prod-${HOSTNAME}"
+  broker:
+    url: tcp://${MQTT_HOST:polytech-smart-greenhouse-mosquitto}:${MQTT_PORT:1883}
+  client:
+    id: greenhouse-server
 
 logging:
   level:

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import java.util.UUID
 
 @Tag(name = "Greenhouse Settings Management", description = "API для управления настройками теплиц")
-@RequestMapping("/v1/greenhouse/settings")
+@RequestMapping("/api/v1/greenhouse/settings")
 interface GreenhouseSettingController {
 
     @Operation(summary = "Создать новые настройки")

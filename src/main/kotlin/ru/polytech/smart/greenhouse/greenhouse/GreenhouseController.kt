@@ -13,7 +13,7 @@ import ru.polytech.smart.greenhouse.greenhouse.GreenhouseTo
 import java.util.UUID
 
 @Tag(name = "Greenhouse Management", description = "API для управления теплицами")
-@RequestMapping("/v1/greenhouses")
+@RequestMapping("/api/v1/greenhouses")
 interface GreenhouseController {
 
     @Operation(summary = "Создать новую теплицу")

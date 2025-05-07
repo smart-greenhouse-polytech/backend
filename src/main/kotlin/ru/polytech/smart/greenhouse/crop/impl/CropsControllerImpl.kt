@@ -14,7 +14,7 @@ import ru.polytech.smart.greenhouse.crop.CropsRepository
 import java.util.UUID
 
 @RestController
-@RequestMapping("/v1/crops")
+@RequestMapping("/api/v1/crops")
 @CrossOrigin
 @RequiredArgsConstructor
 class CropsControllerImpl(

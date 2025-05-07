@@ -17,7 +17,7 @@ import ru.polytech.smart.greenhouse.bed.BedTo
 import java.util.UUID
 
 @Tag(name = "Device Management", description = "API для управления устройствами и получения данных")
-@RequestMapping("/v1/devices")
+@RequestMapping("/api/v1/devices")
 interface DeviceController {
 
     @Operation(
@@ -29,8 +29,7 @@ interface DeviceController {
 
     @Operation(
         summary = "Зарегистрировать новое устройство",
-        description = "Возвращает устройство по указанному идентификатору",
-        tags = ["Experimental"]
+        description = "Регистрирует новое устройство в системе",
     )
     @PostMapping
     fun registerDevice(
@@ -49,8 +48,8 @@ interface DeviceController {
     ): ResponseEntity<DeviceTo>
 
     @Operation(
-        summary = "Получить устройство по ID",
-        description = "Возвращает устройство по указанному идентификатору",
+        summary = "Изменить устройство по указанному ID",
+        description = "Изменяет устройство по указанному ID",
     )
     @PutMapping("/{id}")
     fun updateDevice(
@@ -91,4 +90,16 @@ interface DeviceController {
     )
     @GetMapping("/measurements")
     fun getCurrentMeasurements(): List<DeviceMeasurementTo>
+
+    @Operation(
+        summary = "Отправить команду устройству",
+        description = "Позволяет вручную отправить команду включения/выключения исполнительному устройству.",
+    )
+    @PostMapping("{id}/control")
+    fun controlDevice(
+        @Parameter(description = "ID устройства", required = true)
+        @PathVariable id: UUID,
+        @Parameter(description = "Желаемое состояние устройства", required = true)
+        @RequestParam command: String,
+    ): ResponseEntity<String>
 }

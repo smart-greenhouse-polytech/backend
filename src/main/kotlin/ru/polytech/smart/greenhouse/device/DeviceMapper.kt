@@ -18,8 +18,6 @@ class DeviceMapper(
         greenhouseId = entity.greenhouse?.id,
         bedId = entity.bed?.id,
         status = entity.status,
-        deviceId = entity.deviceId,
-        macAddress = entity.macAddress,
         createdAt = entity.createdAt,
         updatedAt = entity.updatedAt,
     )

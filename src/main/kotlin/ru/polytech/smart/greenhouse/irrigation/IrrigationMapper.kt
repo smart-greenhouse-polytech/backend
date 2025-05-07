@@ -13,7 +13,7 @@ class IrrigationMapper(
         id = entity.id,
         bedId = entity.bed?.id,
         startTime = entity.startTime,
-        requiredVolumeLiters = entity.requiredVolumeLiters,
+        endTime = entity.endTime,
         isActive = entity.isActive,
         daysOfWeek = entity.daysOfWeek,
         createdAt = entity.createdAt,
@@ -31,7 +31,7 @@ class IrrigationMapper(
             id = UUID.randomUUID(),
             bed = bed,
             startTime = dto.startTime ?: throw IllegalArgumentException("Start time must not be null"),
-            requiredVolumeLiters = dto.requiredVolumeLiters ?: throw IllegalArgumentException("requiredVolumeLiters must not be null"),
+            endTime = dto.endTime ?: throw IllegalArgumentException("requiredVolumeLiters must not be null"),
             daysOfWeek = dto.daysOfWeek ?: throw IllegalArgumentException("daysOfWeek must not be null"),
             isActive = dto.isActive ?: false,
         )
@@ -39,7 +39,7 @@ class IrrigationMapper(
 
     fun updateEntityFromDto(entity: IrrigationScheduleEntity, dto: IrrigationScheduleTo) {
         dto.startTime?.let { entity.startTime = it }
-        dto.requiredVolumeLiters?.let { entity.requiredVolumeLiters = it }
+        dto.endTime?.let { entity.endTime = it }
 
         dto.bedId?.let {
             entity.bed = bedRepository.findById(it).orElseThrow {

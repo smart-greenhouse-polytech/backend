@@ -36,6 +36,8 @@ data class BedEntity(
     @OneToMany(mappedBy = "bed", fetch = FetchType.LAZY)
     var devices: MutableList<DeviceEntity>? = mutableListOf(),
 
+    var lastIrrigation: LocalDateTime?,
+
     @CreationTimestamp
     var createdAt: LocalDateTime = LocalDateTime.now(),
     @UpdateTimestamp
