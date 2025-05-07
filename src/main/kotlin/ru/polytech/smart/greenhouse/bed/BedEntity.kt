@@ -21,24 +21,25 @@ import java.util.UUID
 data class BedEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    var id: UUID = UUID.randomUUID(),
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "greenhouse_id")
-    var greenhouse: GreenhouseEntity,
+    var greenhouse: GreenhouseEntity?,
 
     var name: String,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crops_id")
     var crop: CropEntity?,
 
     @OneToMany(mappedBy = "bed", fetch = FetchType.LAZY)
-    var devices: MutableList<DeviceEntity> = mutableListOf(),
+    var devices: MutableList<DeviceEntity>? = mutableListOf(),
+
+    var lastIrrigation: LocalDateTime?,
 
     @CreationTimestamp
-    var createdAt: LocalDateTime,
-
+    var createdAt: LocalDateTime = LocalDateTime.now(),
     @UpdateTimestamp
-    var updatedAt: LocalDateTime
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
 )

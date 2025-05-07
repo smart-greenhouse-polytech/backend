@@ -1,4 +1,7 @@
 spring:
+  docker:
+    compose:
+      lifecycle-management: start-and-stop # или start-only
   application:
     name: smart-greenhouse
   datasource:
@@ -11,6 +14,7 @@ spring:
     drop-first: true
 
 mqtt:
-  broker: tcp://localhost:1883
-  topic: greenhouse/data
-  client-id: "SpringBootMQTTClient"
+  broker:
+    url: tcp://localhost:1883
+  client:
+    id: greenhouse-server

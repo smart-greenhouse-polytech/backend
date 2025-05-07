@@ -2,8 +2,6 @@ package ru.polytech.smart.greenhouse.greenhouse
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
@@ -16,11 +14,7 @@ import java.util.UUID
 data class GreenhouseSettingEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
-
-    @ManyToOne
-    @JoinColumn(name = "greenhouse_id")
-    var greenhouse: GreenhouseEntity,
+    var id: UUID = UUID.randomUUID(),
 
     var tempMin: Double,
     var tempMax: Double,
@@ -30,8 +24,8 @@ data class GreenhouseSettingEntity(
     var lightIntensityMax: Double,
 
     @CreationTimestamp
-    var createdAt: LocalDateTime,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @UpdateTimestamp
-    var updatedAt: LocalDateTime
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 )

@@ -10,13 +10,14 @@
 	</parent>
 	<groupId>ru.polytech</groupId>
 	<artifactId>smart-greenhouse</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>smart-greenhouse</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>21</java.version>
 		<kotlin.version>1.9.24</kotlin.version>
+		<springdoc.openapi.version>2.6.0</springdoc.openapi.version>
 	</properties>
 
 	<dependencies>
@@ -31,6 +32,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc.openapi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
@@ -87,6 +93,11 @@
 			<groupId>net.minidev</groupId>
 			<artifactId>json-smart</artifactId>
 			<version>2.4.10</version> <!-- Используйте последнюю стабильную версию -->
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>1.5.5.Final</version>
 		</dependency>
 
 		<dependency>
@@ -185,7 +196,27 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-swagger</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>get</goal>
+						</goals>
+						<configuration>
+							<artifact>io.swagger:swagger-annotations:1.6.2</artifact>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
+
+
 
 </project>
