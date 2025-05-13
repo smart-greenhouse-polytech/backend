@@ -1,6 +1,7 @@
 package ru.polytech.smart.greenhouse.irrigation.impl
 
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RestController
 import ru.polytech.smart.greenhouse.irrigation.IrrigationMapper
 import ru.polytech.smart.greenhouse.irrigation.IrrigationScheduleController
@@ -9,6 +10,7 @@ import ru.polytech.smart.greenhouse.irrigation.IrrigationScheduleTo
 import java.util.UUID
 
 @RestController
+@CrossOrigin
 class IrrigationScheduleControllerImpl(
     private val scheduleRepository: IrrigationScheduleRepository,
     private val irrigationMapper: IrrigationMapper

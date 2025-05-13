@@ -2,6 +2,7 @@ package ru.polytech.smart.greenhouse.greenhouse.impl
 
 import GreenhouseController
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RestController
 import ru.polytech.smart.greenhouse.greenhouse.GreenhouseMapper
 import ru.polytech.smart.greenhouse.greenhouse.GreenhouseOwnerEntity
@@ -10,6 +11,7 @@ import ru.polytech.smart.greenhouse.greenhouse.GreenhouseTo
 import java.util.UUID
 
 @RestController
+@CrossOrigin
 class GreenhouseControllerImpl(
     private val greenhouseRepository: GreenhouseRepository,
     private val greenhouseMapper: GreenhouseMapper,

@@ -3,6 +3,7 @@ package ru.polytech.smart.greenhouse.device.impl
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RestController
 import ru.polytech.smart.greenhouse.device.*
 import ru.polytech.smart.greenhouse.mqtt.DeviceControlService
@@ -10,6 +11,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @RestController
+@CrossOrigin
 class DeviceControllerImpl(
     private val deviceRepository: DeviceRepository,
     private val measurementRepository: DeviceMeasurementRepository,
