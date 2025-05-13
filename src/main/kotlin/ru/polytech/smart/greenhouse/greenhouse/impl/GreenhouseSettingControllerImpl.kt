@@ -15,7 +15,6 @@ class GreenhouseSettingControllerImpl(
 ) : GreenhouseSettingController {
 
     override fun createSetting(setting: GreenhouseSettingTo): GreenhouseSettingTo {
-        setting.id = UUID.randomUUID()
         return greenhouseSettingMapper.toDto(settingRepository.save(greenhouseSettingMapper.toEntity(setting)))
     }
 

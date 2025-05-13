@@ -14,7 +14,7 @@ import java.util.*
 data class DeviceEntity(
     @Id
     @UuidGenerator
-    var id: UUID = UUID.randomUUID(),
+    val id: UUID? = null,
 
     var name: String,
 

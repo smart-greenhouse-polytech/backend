@@ -16,7 +16,7 @@ data class DeviceTo(
     @Schema(
         description = "Уникальный идентификатор устройства"
     )
-    var id: UUID?,
+    val id: UUID? = null,
 
     @Schema(
         description = "Уникальное наименование устройства",

@@ -16,7 +16,7 @@ import java.util.UUID
 data class GreenhouseOwnerEntity(
     @Id
     @UuidGenerator
-    var id: UUID,
+    val id: UUID? = null,
 
     @ManyToOne
     @JoinColumn(name = "greenhouse_id")

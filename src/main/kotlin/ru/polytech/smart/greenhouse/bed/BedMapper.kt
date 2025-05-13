@@ -16,7 +16,7 @@ class BedMapper(
         greenhouseId = entity.greenhouse?.id,
         name = entity.name,
         cropId = entity.crop?.id,
-        deviceIds = entity.devices?.map { it.id } ?: emptyList(),
+        deviceIds = entity.devices?.map { it?.id } ?: emptyList(),
         lastIrrigation = entity.lastIrrigation,
     )
 
@@ -49,8 +49,9 @@ class BedMapper(
 
         dto.deviceIds?.takeIf { it.isNotEmpty() }?.let { deviceIds ->
             entity.devices = deviceIds.map { deviceId ->
-                deviceRepository.findById(deviceId)
-                    .orElseThrow { IllegalArgumentException("Device with ID $deviceId not found") }
+                deviceId?.let { deviceRepository.findById(deviceId)
+                    .orElseThrow { IllegalArgumentException("Device with ID $deviceId not found") }}
+
             }.toMutableList()
         }
     }

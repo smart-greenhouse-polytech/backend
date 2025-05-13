@@ -28,7 +28,6 @@ class IrrigationMapper(
         } ?: throw IllegalArgumentException("Bed ID must not be null")
 
         return IrrigationScheduleEntity(
-            id = UUID.randomUUID(),
             bed = bed,
             startTime = dto.startTime ?: throw IllegalArgumentException("Start time must not be null"),
             endTime = dto.endTime ?: throw IllegalArgumentException("requiredVolumeLiters must not be null"),

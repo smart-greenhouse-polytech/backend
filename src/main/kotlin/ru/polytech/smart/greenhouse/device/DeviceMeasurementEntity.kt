@@ -15,7 +15,7 @@ import java.util.UUID
 data class DeviceMeasurementEntity(
     @Id
     @UuidGenerator
-    var id: UUID = UUID.randomUUID(),
+    val id: UUID? = null,
 
     @ManyToOne
     @JoinColumn(name = "device_id")

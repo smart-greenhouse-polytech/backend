@@ -10,15 +10,16 @@ import java.util.UUID
 @Repository
 interface DeviceMeasurementRepository : JpaRepository<DeviceMeasurementEntity, UUID> {
 
-    @Query("SELECT m FROM DeviceMeasurementEntity m WHERE m.device = :device ORDER BY m.createdAt DESC")
-    fun findLatestByDevice(device: DeviceEntity): List<DeviceMeasurementEntity>
-
     @Query("SELECT m FROM DeviceMeasurementEntity m WHERE m.device.id = :deviceId AND m.createdAt >= :after")
     fun findByDeviceIdAndCreatedAtAfter(deviceId: UUID, after: LocalDateTime): List<DeviceMeasurementEntity>
 
-    @Query("SELECT m FROM DeviceMeasurementEntity m WHERE m.device.greenhouse.id = :greenhouseId AND m.createdAt >= :after")
-    fun findByGreenhouseIdAndCreatedAtAfter(greenhouseId: UUID, after: LocalDateTime): List<DeviceMeasurementEntity>
-
-    @Query("SELECT AVG(m.value) FROM DeviceMeasurementEntity m WHERE m.device.id = :deviceId AND m.createdAt >= :after")
-    fun findAverageValueByDeviceIdAndPeriod(deviceId: UUID, after: LocalDateTime): Double?
+    @Query("""
+        SELECT m FROM DeviceMeasurementEntity m
+        WHERE m.createdAt = (
+            SELECT MAX(m2.createdAt) FROM DeviceMeasurementEntity m2
+            WHERE m2.device = m.device
+        )
+        AND m.device.status = 'ACTIVE'
+    """)
+    fun findLatestMeasurementsOfActiveDevices(): List<DeviceMeasurementEntity>
 }

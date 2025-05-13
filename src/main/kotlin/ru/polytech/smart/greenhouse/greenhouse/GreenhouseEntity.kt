@@ -16,7 +16,7 @@ import java.util.UUID
 data class GreenhouseEntity(
     @Id
     @UuidGenerator
-    var id: UUID = UUID.randomUUID(),
+    val id: UUID? = null,
 
     var name: String,
 

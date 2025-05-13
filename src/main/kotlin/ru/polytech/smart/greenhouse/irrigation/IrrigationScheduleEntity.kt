@@ -17,7 +17,7 @@ import java.util.*
 data class IrrigationScheduleEntity(
     @Id
     @UuidGenerator
-    var id: UUID = UUID.randomUUID(),
+    val id: UUID? = null,
 
     @ManyToOne
     @JoinColumn(name = "bed_id")

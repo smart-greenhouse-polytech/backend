@@ -8,7 +8,7 @@ import java.util.UUID
 
 data class IrrigationScheduleTo(
     @Schema(description = "Уникальный идентификатор расписания полива")
-    var id: UUID?,
+    val id: UUID? = null,
 
     @Schema(description = "Идентификатор грядки для полива")
     var bedId: UUID?,

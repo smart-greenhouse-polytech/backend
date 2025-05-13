@@ -19,7 +19,6 @@ class GreenhouseSettingMapper {
     )
 
     fun toEntity(dto: GreenhouseSettingTo): GreenhouseSettingEntity = GreenhouseSettingEntity(
-        id = UUID.randomUUID(),
         tempMin = dto.tempMin ?: throw IllegalArgumentException("tempMin must not be null"),
         tempMax = dto.tempMax ?: throw IllegalArgumentException("tempMax must not be null"),
         humidityMin = dto.humidityMin ?: throw IllegalArgumentException("humidityMin must not be null"),

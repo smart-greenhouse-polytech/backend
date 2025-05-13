@@ -8,7 +8,7 @@ data class GreenhouseTo(
     @Schema(
         description = "Уникальный идентификатор теплицы"
     )
-    var id: UUID?,
+    val id: UUID? = null,
 
     @Schema(
         description = "Уникальное имя теплицы"

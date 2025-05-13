@@ -15,7 +15,6 @@ class CropMapper {
     )
 
     fun toEntity(to: CropTo): CropEntity = CropEntity(
-        id = UUID.randomUUID(),
         name = to.name ?: throw IllegalArgumentException("Crop name must not be null"),
         tempMin = to.tempMin ?: throw IllegalArgumentException("Crop tempMin must not be null"),
         tempMax = to.tempMax ?: throw IllegalArgumentException("Crop tempMax must not be null"),
@@ -24,6 +23,9 @@ class CropMapper {
 
     fun updateEntityFromDto(entity: CropEntity, dto: CropTo) {
         dto.name?.let { entity.name = it }
+        dto.tempMin?.let { entity.tempMin = it }
+        dto.tempMax?.let { entity.tempMax = it }
+        dto.waterRequirementLiters?.let { entity.waterRequirementLiters = it }
     }
 
     fun toDto(entities: List<CropEntity>): List<CropTo> = entities.map(this::toDto)

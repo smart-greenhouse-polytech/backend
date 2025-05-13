@@ -1,3 +1,6 @@
+package ru.polytech.smart.greenhouse.greenhouse.impl
+
+import GreenhouseController
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import ru.polytech.smart.greenhouse.greenhouse.GreenhouseMapper
@@ -13,7 +16,6 @@ class GreenhouseControllerImpl(
 ) : GreenhouseController {
 
     override fun createGreenhouse(greenhouse: GreenhouseTo): GreenhouseTo {
-        greenhouse.id = UUID.randomUUID()
         return greenhouseMapper.toDto(greenhouseRepository.save(greenhouseMapper.toEntity(greenhouse)))
     }
 

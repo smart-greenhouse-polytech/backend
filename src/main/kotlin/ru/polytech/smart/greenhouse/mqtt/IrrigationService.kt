@@ -23,13 +23,11 @@ class IrrigationService(
     private val taskScheduler: TaskScheduler,
     private val bedRepository: BedRepository
 ) {
-    private val logger = LoggerFactory.getLogger(javaClass)
-    private val activeSchedules = ConcurrentHashMap<UUID, ScheduledFuture<*>>()
+    private val logger = LoggerFactory.getLogger(IrrigationService::class.java)
+    private val activeSchedules = ConcurrentHashMap<UUID?, ScheduledFuture<*>>()
 
     @PostConstruct
-    fun init() {
-        loadActiveSchedules()
-    }
+    fun init() = loadActiveSchedules()
 
     fun loadActiveSchedules() {
         scheduleRepository.findAllByIsActive(true).forEach { schedule ->
@@ -52,16 +50,8 @@ class IrrigationService(
             return
         }
 
-        val task = IrrigationTask(
-            schedule = schedule,
-            deviceControlService = deviceControlService,
-            bedRepository = bedRepository
-        )
-
-        val trigger = IrrigationTrigger(
-            daysOfWeek = schedule.daysOfWeek,
-            time = schedule.startTime
-        )
+        val task = IrrigationTask(schedule)
+        val trigger = IrrigationTrigger(schedule.daysOfWeek, schedule.startTime)
 
         val scheduledTask = taskScheduler.schedule(task, trigger)
         scheduledTask?.let {
@@ -70,26 +60,20 @@ class IrrigationService(
         }
     }
 
-    fun cancelSchedule(scheduleId: UUID) {
-        activeSchedules[scheduleId]?.let {
+    fun cancelSchedule(scheduleId: UUID?) {
+        activeSchedules.remove(scheduleId)?.also {
             it.cancel(true)
-            activeSchedules.remove(scheduleId)
             logger.info("Cancelled irrigation schedule $scheduleId")
         }
     }
 
     fun updateSchedule(schedule: IrrigationScheduleEntity) {
-        if (schedule.isActive) {
-            scheduleIrrigation(schedule)
-        } else {
-            cancelSchedule(schedule.id)
-        }
+        if (schedule.isActive) scheduleIrrigation(schedule)
+        else cancelSchedule(schedule.id)
     }
 
     inner class IrrigationTask(
-        private val schedule: IrrigationScheduleEntity,
-        private val deviceControlService: DeviceControlService,
-        private val bedRepository: BedRepository
+        private val schedule: IrrigationScheduleEntity
     ) : Runnable {
         override fun run() {
             val bed = schedule.bed ?: run {
@@ -97,21 +81,24 @@ class IrrigationService(
                 return
             }
 
-            val deviceName = schedule.bed?.devices?.find { x -> x.type == DeviceType.WATER_VALVE }?.name
-                ?: throw RuntimeException("Device name not found for schedule ${schedule.id}")
-
+            val device = schedule.bed?.devices
+                ?.find { it?.type == DeviceType.WATER_VALVE }
+                ?: run {
+                    logger.error("Water valve device not found for schedule ${schedule.id}")
+                    return
+                }
 
             try {
-                val valveDevice = DeviceIdentifier(
-                    deviceType = DeviceType.WATER_VALVE,
-                    deviceName = deviceName
-                )
+                val valveDevice = DeviceIdentifier(device.type, device.name)
 
                 logger.info("Starting irrigation for bed ${bed.id} (${bed.name})")
                 deviceControlService.sendCommand(valveDevice, "1")
 
-                // Запланировать выключение по endTime
-                val duration = Duration.between(schedule.startTime, schedule.endTime)
+                // Расчёт корректного времени с учётом возможного перехода через полночь
+                val duration = Duration.between(schedule.startTime, schedule.endTime).let {
+                    if (it.isNegative || it.isZero) it.plusHours(24) else it
+                }
+
                 taskScheduler.schedule(
                     {
                         deviceControlService.sendCommand(valveDevice, "0")
@@ -120,7 +107,6 @@ class IrrigationService(
                     Instant.now().plus(duration)
                 )
 
-                // Обновим статус грядки
                 bed.lastIrrigation = LocalDateTime.now()
                 bedRepository.save(bed)
 
@@ -135,16 +121,10 @@ class IrrigationService(
         private val time: LocalTime
     ) : Trigger {
         override fun nextExecution(triggerContext: TriggerContext): Instant? {
-            val now = LocalDateTime.now()
-            var nextRun = now.with(time)
+            var nextRun = LocalDateTime.now().with(time)
+            if (nextRun.isBefore(LocalDateTime.now())) nextRun = nextRun.plusDays(1)
 
-            // Если время уже прошло сегодня, планируем на следующий день
-            if (nextRun.isBefore(now)) {
-                nextRun = nextRun.plusDays(1)
-            }
-
-            // Ищем ближайший день недели из расписания
-            while (!daysOfWeek.contains(nextRun.dayOfWeek)) {
+            while (nextRun.dayOfWeek !in daysOfWeek) {
                 nextRun = nextRun.plusDays(1)
             }
 

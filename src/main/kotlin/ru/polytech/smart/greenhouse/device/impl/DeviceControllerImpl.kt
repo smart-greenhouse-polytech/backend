@@ -5,10 +5,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.RestController
 import ru.polytech.smart.greenhouse.device.*
-import ru.polytech.smart.greenhouse.greenhouse.GreenhouseTo
 import ru.polytech.smart.greenhouse.mqtt.DeviceControlService
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @RestController
 class DeviceControllerImpl(
@@ -66,8 +65,20 @@ class DeviceControllerImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getCurrentMeasurements(): List<DeviceMeasurementTo> {
-        return deviceMeasurementMapper.toDto(measurementRepository.findAll())
+    override fun getCurrentMeasurements(): List<LatestDeviceMeasurementDto> {
+
+        val latestMeasurements = measurementRepository.findLatestMeasurementsOfActiveDevices()
+
+        return latestMeasurements.map {
+            LatestDeviceMeasurementDto(
+                deviceId = it.device.id!!,
+                deviceName = it.device.name,
+                deviceType = it.device.type,
+                value = it.value,
+                measuredAt = it.createdAt
+            )
+        }.toList()
+
     }
 
     override fun controlDevice(id: UUID, command: String): ResponseEntity<String> {

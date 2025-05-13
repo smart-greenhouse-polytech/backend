@@ -84,12 +84,11 @@ interface DeviceController {
     ): List<DeviceMeasurementTo>
 
     @Operation(
-        summary = "Получить текущие измерения в теплице",
-        description = "Возвращает среднее значение всех измерений в данный момент",
-        tags = ["Experimental"]
+        summary = "Получить последние измерения в теплице",
+        description = "Возвращает последние измерения в данный момент",
     )
     @GetMapping("/measurements")
-    fun getCurrentMeasurements(): List<DeviceMeasurementTo>
+    fun getCurrentMeasurements(): List<LatestDeviceMeasurementDto>
 
     @Operation(
         summary = "Отправить команду устройству",

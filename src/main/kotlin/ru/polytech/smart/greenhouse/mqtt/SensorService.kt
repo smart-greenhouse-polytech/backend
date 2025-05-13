@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct
 import org.eclipse.paho.client.mqttv3.IMqttClient
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.polytech.smart.greenhouse.device.DeviceMeasurementEntity
 import ru.polytech.smart.greenhouse.device.DeviceMeasurementRepository
 import ru.polytech.smart.greenhouse.device.DeviceRepository
@@ -25,6 +26,10 @@ class SensorService(
 
     @PostConstruct
     fun init() {
+        if (!mqttClient.isConnected) {
+            logger.error("MQTT client is not connected")
+            return
+        }
         subscribeToSensors()
     }
 
@@ -32,7 +37,11 @@ class SensorService(
         sensorDevices.forEach { type ->
             try {
                 mqttClient.subscribe(type.topicName) { _, message ->
-                    processSensorData(type, String(message.payload))
+                    try {
+                        processSensorData(type, String(message.payload))
+                    } catch (ex: Exception) {
+                        logger.error("Error processing message on topic ${type.topicName}", ex)
+                    }
                 }
                 logger.info("Subscribed to ${type.topicName}")
             } catch (e: Exception) {
@@ -42,7 +51,8 @@ class SensorService(
 
     }
 
-    private fun processSensorData(type: DeviceType, payload: String) {
+    @Transactional
+    fun processSensorData(type: DeviceType, payload: String) {
         logger.info("Processing ${type.topicName} with payload $payload")
         val (deviceName, valueStr) = readingPattern.find(payload)?.destructured ?: run {
             logger.warn("Invalid payload format for $type: $payload. Expected 'deviceName:value'")
@@ -62,6 +72,6 @@ class SensorService(
         )
 
         deviceMeasurementRepository.save(devMes)
-        logger.debug("Saved ${type.name} data from $deviceName: $value")
+        logger.info("Saved ${type.name} data from $deviceName: $value")
     }
 }

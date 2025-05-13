@@ -14,7 +14,7 @@ import java.util.UUID
 data class GreenhouseSettingEntity(
     @Id
     @UuidGenerator
-    var id: UUID = UUID.randomUUID(),
+    val id: UUID? = null,
 
     var tempMin: Double,
     var tempMax: Double,

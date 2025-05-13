@@ -18,7 +18,7 @@ data class BedTo(
     val cropId: UUID?,
 
     @Schema(description = "Список ID устройств", nullable = true)
-    val deviceIds: List<UUID>?,
+    val deviceIds: List<UUID?>?,
 
     @Schema(description = "Время последнего полива", nullable = true)
     var lastIrrigation: LocalDateTime?,

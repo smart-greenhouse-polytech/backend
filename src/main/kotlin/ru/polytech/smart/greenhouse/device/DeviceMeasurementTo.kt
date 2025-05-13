@@ -15,7 +15,7 @@ data class DeviceMeasurementTo (
     @Schema(
         description = "Уникальный идентификатор измерения"
     )
-    var id: UUID,
+    val id: UUID? = null,
 
     @ManyToOne
     @JoinColumn(name = "device_id")
@@ -23,7 +23,7 @@ data class DeviceMeasurementTo (
         description = "Устройство, связанное с измерением",
         required = true
     )
-    var deviceId: UUID,
+    var deviceId: UUID?,
 
     @Schema(
         description = "Значение измерения",

@@ -3,18 +3,18 @@ package ru.polytech.smart.greenhouse.crop
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.UpdateTimestamp
-import org.hibernate.annotations.UuidGenerator
+import org.hibernate.annotations.*
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
 @Table(name = "crops")
+@DynamicInsert
+@DynamicUpdate
 data class CropEntity(
     @Id
     @UuidGenerator
-    var id: UUID? = null,
+    val id: UUID? = null,
 
     var name: String,
 

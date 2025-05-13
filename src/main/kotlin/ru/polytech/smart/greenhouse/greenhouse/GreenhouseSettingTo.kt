@@ -9,7 +9,7 @@ data class GreenhouseSettingTo(
     @Schema(
         description = "Уникальный идентификатор настроек теплицы"
     )
-    var id: UUID?,
+    val id: UUID? = null,
 
     @Schema(
         description = "Минимальная рекомендованная температура в теплице"

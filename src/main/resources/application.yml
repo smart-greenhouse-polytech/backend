@@ -4,14 +4,21 @@ spring:
       lifecycle-management: start-and-stop # или start-only
   application:
     name: smart-greenhouse
+
   datasource:
     url: jdbc:postgresql://localhost:5432/polytech-smart-house
     username: user
     password: password
     driver-class-name: org.postgresql.Driver
+
   liquibase:
+    enabled: true
     change-log: classpath:/db/changelog.xml
     drop-first: true
+    url: jdbc:postgresql://localhost:5432/polytech-smart-house
+    user: user
+    password: password
+    driver-class-name: org.postgresql.Driver
 
 mqtt:
   broker:

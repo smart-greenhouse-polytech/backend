@@ -10,12 +10,18 @@ import ru.polytech.smart.greenhouse.device.DeviceIdentifier
 class DeviceControlService(
     private val mqttClient: IMqttClient,
 ) {
-    private val logger = LoggerFactory.getLogger(javaClass)
+    private val logger = LoggerFactory.getLogger(DeviceControlService::class.java)
 
     fun sendCommand(device: DeviceIdentifier, command: String) {
+        if (!mqttClient.isConnected) {
+            logger.error("MQTT client is not connected. Cannot send command to ${device.deviceName}")
+            return
+        }
+
         try {
             val payload = "${device.deviceName}:$command"
-            mqttClient.publish(device.deviceType.topicName, MqttMessage(payload.toByteArray()))
+            val message = MqttMessage(payload.toByteArray())
+            mqttClient.publish(device.deviceType.topicName, message)
             logger.info("Sent command to ${device.deviceType.name} (${device.deviceName}): $command")
         } catch (e: Exception) {
             logger.error("Error sending command to ${device.deviceName}", e)

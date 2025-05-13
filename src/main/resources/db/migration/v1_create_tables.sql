@@ -133,10 +133,10 @@ VALUES
 -- Вставка тестовых данных в таблицу devices
 INSERT INTO devices (name, type, greenhouse_id, bed_id, status)
 VALUES
-    ('Valve 1', 'WATER_VALVE', (SELECT id FROM greenhouses WHERE name = 'Greenhouse A' LIMIT 1), (SELECT id FROM beds WHERE name = 'Bed 1' LIMIT 1), 'active'),
-    ('Heater 1', 'HEATING', (SELECT id FROM greenhouses WHERE name = 'Greenhouse B' LIMIT 1), (SELECT id FROM beds WHERE name = 'Bed 3' LIMIT 1), 'inactive'),
-    ('Fan 1', 'FAN', (SELECT id FROM greenhouses WHERE name = 'Greenhouse C' LIMIT 1), (SELECT id FROM beds WHERE name = 'Bed 4' LIMIT 1), 'active'),
-    ('Window 1', 'WINDOW', (SELECT id FROM greenhouses WHERE name = 'Greenhouse D' LIMIT 1), (SELECT id FROM beds WHERE name = 'Bed 2' LIMIT 1), 'inactive');
+    ('Valve 1', 'WATER_VALVE', (SELECT id FROM greenhouses WHERE name = 'Greenhouse A' LIMIT 1), (SELECT id FROM beds WHERE name = 'Bed 1' LIMIT 1), 'ACTIVE'),
+    ('Heater 1', 'HEATING', (SELECT id FROM greenhouses WHERE name = 'Greenhouse B' LIMIT 1), (SELECT id FROM beds WHERE name = 'Bed 3' LIMIT 1), 'ACTIVE'),
+    ('Fan 1', 'FAN', (SELECT id FROM greenhouses WHERE name = 'Greenhouse C' LIMIT 1), (SELECT id FROM beds WHERE name = 'Bed 4' LIMIT 1), 'ACTIVE'),
+    ('Window 1', 'WINDOW', (SELECT id FROM greenhouses WHERE name = 'Greenhouse D' LIMIT 1), (SELECT id FROM beds WHERE name = 'Bed 2' LIMIT 1), 'ACTIVE');
 
 -- Вставка тестовых данных в таблицу device_measurement
 INSERT INTO device_measurement (device_id, value)
